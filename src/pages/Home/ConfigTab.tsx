@@ -1,8 +1,9 @@
-import { ChangeEvent, useState, VFC } from "react";
+import { ChangeEvent, useCallback, useState, VFC } from "react";
 import { Box, Button, makeStyles, TextField, Theme, IconButton } from "@material-ui/core";
-import { IFormSchema, TSchema } from "./ResultTab";
 import { checkJSON } from "utils/checkJSON";
 import { Code } from "@material-ui/icons";
+import { instanceOfSchema } from "utils/instanceOfSchema";
+import { IFormSchema } from "./Home.interfaces";
 
 const config = `{
   "title": "Title form",
@@ -31,9 +32,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     display: "flex",
     flexDirection: "column",
+    justifyContent: "space-between",
     padding: theme.spacing(2),
     gap: theme.spacing(2),
-    height: "100%",
+    height: `calc(100% - ${theme.spacing(4)}px)`,
   },
   inputJson: {
     textDecorationStyle: "wavy",
@@ -61,16 +63,15 @@ interface IProps {
   selectedTab: number;
   defaultText?: string;
   setSchema: (schema: IFormSchema) => void;
+  clearSchema: () => void;
 }
 
-export const ConfigTab: VFC<IProps> = ({ selectedTab, index, defaultText, setSchema, ...other }) => {
+export const ConfigTab: VFC<IProps> = ({ selectedTab, index, defaultText, setSchema, clearSchema, ...other }) => {
   const classes = useStyles();
   const [text, setText] = useState("");
   const [isValid, setIsValid] = useState(false);
 
-  const instanceOfSchema = (object: any): object is TSchema => "label" in object && "type" in object;
-
-  const handleChangeText = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeText = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setIsValid(() => {
       const isChecked = checkJSON(event.target.value);
       const parsedJSON = isChecked ? JSON.parse(event.target.value) : {};
@@ -79,64 +80,61 @@ export const ConfigTab: VFC<IProps> = ({ selectedTab, index, defaultText, setSch
       );
     });
     setText(event.target.value);
-  };
+  }, []);
 
   return (
-    <Box role="tabpanel" hidden={selectedTab !== index} {...other}>
-      {selectedTab === index && (
-        <Box className={classes.wrapper}>
-          <Box className={classes.textFieldWrapper}>
-            <TextField
-              label="JSON"
-              fullWidth
-              multiline
-              minRows={16}
-              maxRows={16}
-              variant="outlined"
-              value={text}
-              inputProps={{
-                className: classes.inputJson,
-                style: { textDecorationLine: isValid ? "none" : "underline" },
-              }}
-              InputProps={{ spellCheck: false }}
-              onChange={handleChangeText}
-            />
-            <IconButton
-              size="small"
-              className={classes.exampleButton}
-              onClick={() => {
-                setText(config);
-                setIsValid(true);
-              }}
-            >
-              <Code />
-            </IconButton>
-          </Box>
-          <Box className={classes.buttons}>
-            <Button
-              color="primary"
-              variant="contained"
-              disabled={!text}
-              onClick={() => {
-                setText("");
-                setIsValid(false);
-              }}
-              fullWidth
-            >
-              Clear
-            </Button>
-            <Button
-              fullWidth
-              color="primary"
-              variant="contained"
-              disabled={!isValid}
-              onClick={() => setSchema(isValid ? JSON.parse(text) : [])}
-            >
-              Apply
-            </Button>
-          </Box>
-        </Box>
-      )}
+    <Box role="tabpanel" hidden={selectedTab !== index} className={classes.wrapper} {...other}>
+      <Box className={classes.textFieldWrapper}>
+        <TextField
+          label="JSON"
+          fullWidth
+          multiline
+          minRows={16}
+          maxRows={16}
+          variant="outlined"
+          value={text}
+          inputProps={{
+            className: classes.inputJson,
+            style: { textDecorationLine: isValid ? "none" : "underline" },
+          }}
+          InputProps={{ spellCheck: false }}
+          onChange={handleChangeText}
+        />
+        <IconButton
+          size="small"
+          className={classes.exampleButton}
+          onClick={() => {
+            setText(config);
+            setIsValid(true);
+          }}
+        >
+          <Code />
+        </IconButton>
+      </Box>
+      <Box className={classes.buttons}>
+        <Button
+          color="primary"
+          variant="contained"
+          disabled={!text}
+          onClick={() => {
+            setText("");
+            setIsValid(false);
+            clearSchema();
+          }}
+          fullWidth
+        >
+          Clear
+        </Button>
+        <Button
+          fullWidth
+          color="primary"
+          variant="contained"
+          disabled={!isValid}
+          onClick={() => setSchema(isValid ? JSON.parse(text) : [])}
+        >
+          Apply
+        </Button>
+      </Box>
     </Box>
   );
 };

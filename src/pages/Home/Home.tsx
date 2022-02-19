@@ -1,8 +1,9 @@
-import { AppBar, Box, makeStyles, Paper, Tab, Tabs, Theme, useTheme } from "@material-ui/core";
 import { useState } from "react";
+import { AppBar, Box, makeStyles, Paper, Tab, Tabs, Theme, useTheme } from "@material-ui/core";
 import SwipeableViews from "react-swipeable-views";
 import { ConfigTab } from "./ConfigTab";
-import { IFormSchema, ResultTab, TSchema } from "./ResultTab";
+import { IFormSchema } from "./Home.interfaces";
+import { ResultTab } from "./ResultTab";
 
 const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
@@ -59,6 +60,7 @@ export const Home = () => {
             selectedTab={selectedTab}
             index={0}
             dir={theme.direction}
+            clearSchema={() => setSchema({ items: [] })}
             setSchema={(data) => {
               setSchema(data);
               setSelectedTab(1);

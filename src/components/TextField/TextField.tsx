@@ -1,5 +1,5 @@
-import { TextField as InputText } from "@material-ui/core";
 import { useState, VFC } from "react";
+import { TextField as InputText } from "@material-ui/core";
 
 export enum ITextFieldType {
   TEXT = "text",

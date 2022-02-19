@@ -1,6 +1,5 @@
+import { useState, VFC, useEffect } from "react";
 import { Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel } from "@material-ui/core";
-import { useEffect } from "react";
-import { useState, VFC } from "react";
 
 interface IValues {
   [key: string]: boolean;
@@ -16,7 +15,10 @@ export const CheckboxField: VFC<IProps> = ({ label, defaultValues, values }) => 
   const [state, setState] = useState<IValues>();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState((prev) => ({ ...prev, [event.target.name]: event.target.checked }));
+    setState((prev) => ({
+      ...prev,
+      [event.target.name]: event.target.checked,
+    }));
   };
 
   useEffect(() => {

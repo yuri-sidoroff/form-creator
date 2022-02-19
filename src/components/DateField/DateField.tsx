@@ -1,6 +1,6 @@
+import { useState, VFC } from "react";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import dayjs from "dayjs";
-import { useState, VFC } from "react";
 
 interface IProps {
   label: string;

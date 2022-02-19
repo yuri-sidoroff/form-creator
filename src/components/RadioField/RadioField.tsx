@@ -26,7 +26,12 @@ export const RadioField: VFC<IProps> = ({ label, defaultValue, values }) => {
       <FormLabel component="legend">{label}</FormLabel>
       <RadioGroup value={value} onChange={handleChange} className={classes.radioGroup}>
         {values.map((item) => (
-          <FormControlLabel key={item} value={item} control={<Radio checked={item === value} color="primary" />} label={item} />
+          <FormControlLabel
+            key={item}
+            value={item}
+            control={<Radio checked={item === value} color="primary" />}
+            label={item}
+          />
         ))}
       </RadioGroup>
     </FormControl>
