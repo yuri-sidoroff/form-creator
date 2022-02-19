@@ -9,12 +9,12 @@ export enum ITextFieldType {
 
 interface IProps {
   label: string;
-  defaultValue?: string | number;
+  defaultValue?: string;
   type?: ITextFieldType;
 }
 
 export const TextField: VFC<IProps> = ({ label, defaultValue, type = ITextFieldType.TEXT }) => {
-  const [value, setValue] = useState<string>(defaultValue?.toString() || "");
+  const [value, setValue] = useState<string>(defaultValue || "");
 
   return (
     <InputText
@@ -25,6 +25,8 @@ export const TextField: VFC<IProps> = ({ label, defaultValue, type = ITextFieldT
       label={label}
       value={value}
       onChange={(event) => setValue(event.target.value)}
+      variant="outlined"
+      size="small"
     />
   );
 };

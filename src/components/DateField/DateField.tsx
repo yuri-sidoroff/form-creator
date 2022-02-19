@@ -20,6 +20,7 @@ export const DateField: VFC<IProps> = ({ label, defaultValue }) => {
       value={value}
       onChange={setValue}
       inputVariant="outlined"
+      size="small"
     />
   );
 };

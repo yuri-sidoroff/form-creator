@@ -34,8 +34,9 @@ export const CheckboxField: VFC<IProps> = ({ label, defaultValues, values }) => 
       <FormGroup aria-label="position" row>
         {values.map((item) => (
           <FormControlLabel
+            key={item}
             value="end"
-            control={<Checkbox checked={state?.[item]} onChange={handleChange} color="primary" />}
+            control={<Checkbox name={item} checked={!!state?.[item]} onChange={handleChange} color="primary" />}
             label={item}
             labelPlacement="end"
           />
